@@ -1,0 +1,11 @@
+1) znajdz zastosowanie dziedziczenia 
+
+ 1. **Klasa bazowa i dziedziczenie**:
+   - Stwórz klasê bazow¹, np. `Osoba`, która bêdzie zawiera³a wspólne atrybuty i metody dla trenerów i zawodników 
+   (np. imiê, nazwisko, kraj pochodzenia, data urodzenia).
+   - Zmodyfikuj klasy `Trener` i `Zawodnik` tak, aby dziedziczy³y po klasie `Osoba`.
+
+2. **Sortowanie wyników**:
+   - Wyniki wyszukiwania powinny byæ posortowane wed³ug pory roku urodzenia, zaczynaj¹c od wiosny i koñcz¹c na zimie.
+   U¿yj do tego celu metody `Array.Sort` oraz interfejsu `IComparable`.
+

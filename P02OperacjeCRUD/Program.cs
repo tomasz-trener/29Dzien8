@@ -43,6 +43,23 @@ namespace P02OperacjeCRUD
 
             //// uwaga! trzeba zdefiniować klucz główny w tabelce żeby działało dodawanie 
 
+            //EDYCJA 
+
+            // krok 1: najpierw pobieramy zawodnika z bazy, którego chcemy edytować 
+            // krok 2: potem lokalnie zmieniamy właściwosci 
+            // krok 3: wywołujemy submitchanges 
+        
+            var doEdycji = db.Zawodnik.FirstOrDefault(x=>x.id_zawodnika == 2);
+            doEdycji.wzrost = doEdycji.wzrost + 5;
+            doEdycji.nazwisko = "Nowak";
+            db.SubmitChanges();
+
+            // usuwanie 
+
+            var doUsuniecia = db.Zawodnik.FirstOrDefault(x=>x.id_zawodnika==18);
+            db.Zawodnik.DeleteOnSubmit(doUsuniecia);
+            db.SubmitChanges();
+
 
         }
     }
