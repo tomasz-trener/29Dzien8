@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -105,6 +106,79 @@ namespace P01ORMWstep
             // i posortuj wyniki po BMI malejąco 
             //bmi = waga[kg]/wzrost[m]^2
             // wynik bmi podaj do dwóch miejsc po przecinku 
+
+            //select imie, nazwisko, FORMAT(waga / power((wzrost / 100.0), 2), '0.00') bmi
+            //from zawodnicy
+            //order by bmi desc
+
+            var wyn15 = db.Zawodnik
+                .Where(x => x.waga.HasValue && x.wzrost.HasValue) // upewnienie sie ze waga i wzrost maja uzup. wartosci 
+                .Select(x => new
+                {
+                    Imie = x.imie,
+                    Nazwisko = x.nazwisko,
+                    BMI = Math.Round((double)x.waga / Math.Pow((double)x.wzrost / 100, 2), 2, MidpointRounding.AwayFromZero)
+                })
+                .OrderByDescending(x=>x.BMI).ToList();
+
+                //2.5  do 3 
+                // 3.5 do 4
+                // -2.5 do -3
+                // -3.5 do  -4 
+
+                var wyn15b = 
+                    (from x in db.Zawodnik
+                     where x.waga.HasValue && x.wzrost.HasValue
+                     select new
+                     {
+                         Imie = x.imie,
+                         Nazwisko = x.nazwisko,
+                         BMI = Math.Round((double)x.waga / Math.Pow((double)x.wzrost / 100, 2), 2, MidpointRounding.AwayFromZero)
+                     })
+                     .OrderByDescending (x=>x.BMI).ToList();
+
+
+                IQueryable<Zawodnik> wyn16 = db.Zawodnik.Where(x => x.kraj == "pol"); // to jescze nie zostalo wyslane do bazy
+
+                var wyn17 = wyn16.Where(x => x.wzrost > 170).ToArray(); // dopiero teraz zapytanie poszlo do bazy danych 
+
+            // poznalismy: select , from , where, order by 
+
+            // group by 
+
+
+            //select kraj, avg(convert(decimal, wzrost))
+            //from zawodnicy
+            //group by kraj
+
+            var var18 = db.Zawodnik
+                .GroupBy(x => x.kraj)
+                .Select(x => new
+                {
+                    Kraj = x.Key,
+                    SredniWzrost = x.Average(y => y.wzrost)
+                }).ToArray();
+
+
+            var wyn19 = db.Zawodnik.GroupBy(x => x.kraj).ToArray();// to nam zwraca grupy 
+
+            string kraj1 = wyn19[0].Key;// kraj z pierwzsej grupy 
+            double? sredniWzrostZGrupy1 = wyn19.Select(x=>x.Average(y=>y.wzrost)).First();
+
+            Zawodnik najnizszy = db.Zawodnik.OrderBy(x => x.wzrost).FirstOrDefault();
+
+            // wypisz wszystkie wartości długości nazwisk, wraz z informacją ile osób posiada
+            // nazwisko o podanej długości 
+            //np:
+            // nazwisko o długości 5 ma 4 osoby
+            // nazwisko o długości 7 ma 6 osoby
+            // nazwisko o długości 6 ma 6 osoby
+            //.... itd..
+            // wyniki posortuj po liczbie osób w grupie rosnąco
+            // , a jeżeli liczba osób jest taka sama to po długości nazwiska malejąco
+
+            // * uwzgędnij tylko zawodników, których nazwisko nie zaczyna się na "a"
+            // i wypisz tylko te grupy, które zawierają co najmniej 2 osoby 
         }
     }
 }
