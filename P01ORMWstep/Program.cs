@@ -329,6 +329,7 @@ namespace P01ORMWstep
             foreach (var g in wyn31)
                 Console.WriteLine(polskieWyrazy.DateTimeFormat.GetMonthName(g.NrMiesiaca) + " " + g.Nazwiska);
 
+             
 
             Console.ReadKey();
         }
