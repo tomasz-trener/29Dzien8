@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -46,7 +47,7 @@ namespace P01ORMWstep
                     .ToArray();
 
 
-            Console.ReadKey();
+           
 
             // znajdz zawodników, których nazwisko konczy się na litere a 
             // oraz wzrost jest ponad 2 razy wiekszy niz waga
@@ -179,6 +180,67 @@ namespace P01ORMWstep
 
             // * uwzgędnij tylko zawodników, których nazwisko nie zaczyna się na "a"
             // i wypisz tylko te grupy, które zawierają co najmniej 2 osoby 
+
+
+            //select len(nazwisko) dlugosc, count(*) liczbaOsob
+            //from zawodnicy
+            //where LEFT(nazwisko, 1) != 'a'
+            //group by len(nazwisko)
+            //having count(*) > 1
+            //order by liczbaOsob, dlugosc desc
+
+            var wyn20 = db.Zawodnik
+                .Where(x=> !x.nazwisko.StartsWith("a"))
+                .GroupBy(x=>x.nazwisko.Length)
+                .Select(x=> new
+                {
+                    DlugoscNazwiska = x.Key,
+                    LiczbaOsob = x.Count(),
+                    Srednia = x.Average(y=>y.wzrost),
+                    Max = x.Max(y=>y.wzrost),   
+                })
+                .Where(x=>x.LiczbaOsob> 1)
+                .OrderBy(x=>x.LiczbaOsob)
+                .ThenByDescending(x=>x.DlugoscNazwiska)
+                .ToArray();
+
+            foreach (var g in wyn20)
+                Console.WriteLine($"Nazwisko o długosci {g.DlugoscNazwiska} ma {g.LiczbaOsob} osob");
+
+
+            // a co gdybysmy chcieli uzyskac zbior nazwisk o dlugosci od 1 do 15 
+            var dlugosciNazwisk = Enumerable.Range(1, 15);
+
+            Console.WriteLine("----------");
+            var wyn20b = dlugosciNazwisk
+                .Select(x=>new
+                {
+                    DlugoscNazwiska = x,
+                    LiczbaOsob = wyn20.FirstOrDefault(y=>y.DlugoscNazwiska==x)?.LiczbaOsob ?? 0
+                }).OrderBy(x=>x.DlugoscNazwiska).ToArray();
+
+            foreach (var g in wyn20b)
+                Console.WriteLine($"Nazwisko o długosci {g.DlugoscNazwiska} ma {g.LiczbaOsob} osob");
+
+
+            // Dla kazdego kraju, wypisz po przecinku liste nazwisk zawodników z danego kraju 
+
+            var wyn21 = db.Zawodnik
+                .GroupBy(x => x.kraj)
+                .Select(x => new 
+                {
+                    Kraj = x.Key,
+                    Nazwiska = x.Select(y=>y.nazwisko).OrderBy(y=>y)
+                }).ToArray();
+
+            foreach (var g in wyn21)
+            {
+                Console.WriteLine("Kraj " + g.Kraj);
+                Console.WriteLine(string.Join(" ,", g.Nazwiska));
+            }
+
+
+            Console.ReadKey();
         }
     }
 }
