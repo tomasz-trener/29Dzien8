@@ -50,6 +50,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelBazy.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Domains\GrupaKraju.cs" />
     <Compile Include="Domains\Osoba.cs" />
     <Compile Include="Domains\Trener.cs" />
     <Compile Include="Domains\Zawodnik.cs" />

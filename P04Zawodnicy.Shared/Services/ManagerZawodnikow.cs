@@ -186,6 +186,11 @@ namespace P04Zawodnicy.Shared.Services
             }
              return wyniki;
         }
+
+        public GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

@@ -24,6 +24,11 @@ namespace P04Zawodnicy.Shared.Services
             return new string[] { "POL", "GER" };
         }
 
+        public GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju()
+        {
+            throw new NotImplementedException();
+        }
+
         public int PodajSredniWiekZawodnikow(string kraj)
         {
             throw new NotImplementedException();

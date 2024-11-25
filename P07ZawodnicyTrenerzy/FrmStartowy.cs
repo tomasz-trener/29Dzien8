@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace P03AplikacjaBazodanowaZawodnicy
 {
@@ -31,6 +32,8 @@ namespace P03AplikacjaBazodanowaZawodnicy
 
             foreach (var k in Zawodnik.DostepneKolumny)
                 cbKolumny.Items.Add(k);
+
+            Odswiez();
         }
 
         public void Odswiez()
@@ -40,6 +43,27 @@ namespace P03AplikacjaBazodanowaZawodnicy
             cbKraje.DataSource = kraje;
 
             generujObrazkiKrajow(kraje);
+            przygotujWykres();
+        }
+
+        private void przygotujWykres()
+        {
+            chartWykres.Series.Clear();
+            Series seriaDanych = new Series("Wzrosty");
+            seriaDanych.ChartType= SeriesChartType.Column;
+
+            //string[] osX = new string[] { "POL", "GER" };
+            //double[] osY = new double[] { 185, 184 };
+
+            GrupaKraju[] gk = mz.PodajSerdniWzrostDlaKazdegoKraju();
+            string[] osX = gk.Select(x=>x.Kraj).ToArray();
+            double[] osY = gk.Select(y => y.SredniWzrost).ToArray();
+
+            seriaDanych.Points.DataBindXY(osX, osY);
+            chartWykres.Series.Add(seriaDanych);
+
+            chartWykres.ChartAreas[0].AxisY.Minimum = 150;
+            chartWykres.ChartAreas[0].AxisY.Maximum= 200;
         }
 
         private void generujObrazkiKrajow(string[] kraje)

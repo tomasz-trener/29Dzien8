@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.lbDane = new System.Windows.Forms.ListBox();
             this.btnTemperatuara = new System.Windows.Forms.Button();
             this.lblRaport = new System.Windows.Forms.Label();
@@ -42,6 +45,8 @@
             this.btnPokazSredniWeik = new System.Windows.Forms.Button();
             this.pnlFlagi = new System.Windows.Forms.Panel();
             this.btnWyszukiwarka = new System.Windows.Forms.Button();
+            this.chartWykres = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            ((System.ComponentModel.ISupportInitialize)(this.chartWykres)).BeginInit();
             this.SuspendLayout();
             // 
             // lbDane
@@ -174,11 +179,28 @@
             this.btnWyszukiwarka.UseVisualStyleBackColor = true;
             this.btnWyszukiwarka.Click += new System.EventHandler(this.btnWyszukiwarka_Click);
             // 
+            // chartWykres
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chartWykres.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartWykres.Legends.Add(legend1);
+            this.chartWykres.Location = new System.Drawing.Point(509, 14);
+            this.chartWykres.Name = "chartWykres";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartWykres.Series.Add(series1);
+            this.chartWykres.Size = new System.Drawing.Size(300, 300);
+            this.chartWykres.TabIndex = 15;
+            this.chartWykres.Text = "chart1";
+            // 
             // FrmStartowy
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(517, 452);
+            this.ClientSize = new System.Drawing.Size(837, 452);
+            this.Controls.Add(this.chartWykres);
             this.Controls.Add(this.btnWyszukiwarka);
             this.Controls.Add(this.pnlFlagi);
             this.Controls.Add(this.btnPokazSredniWeik);
@@ -195,6 +217,7 @@
             this.Controls.Add(this.lbDane);
             this.Name = "FrmStartowy";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.chartWykres)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -216,6 +239,7 @@
         private System.Windows.Forms.Button btnPokazSredniWeik;
         private System.Windows.Forms.Panel pnlFlagi;
         private System.Windows.Forms.Button btnWyszukiwarka;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartWykres;
     }
 }
 

@@ -182,5 +182,10 @@ namespace P04Zawodnicy.Shared.Services
         {
             throw new NotImplementedException();
         }
+
+        public GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

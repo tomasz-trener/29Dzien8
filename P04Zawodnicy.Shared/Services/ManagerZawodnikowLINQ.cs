@@ -163,5 +163,20 @@ namespace P04Zawodnicy.Shared.Services
                 return zawodnicy.Concat(trenerzy).ToList();
             }
         }
+
+        public GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju()
+        {
+            
+            using(ModelBazyDataContext db = new ModelBazyDataContext())
+            {
+                return db.ZawodnikDb
+                    .GroupBy(x=>x.kraj)
+                    .Select(x=> new GrupaKraju()
+                    {
+                        Kraj = x.Key,
+                        SredniWzrost = x.Average(y=>y.wzrost).Value
+                    }).ToArray();
+            }
+        }
     }
 }

@@ -25,5 +25,7 @@ namespace P04Zawodnicy.Shared.Services
 
         Trener[] PodajTrenerow();
         List<Osoba> WyszukajOsoby(string text);
+
+        GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju();
     }
 }

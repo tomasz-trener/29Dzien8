@@ -24,6 +24,11 @@ namespace P04Zawodnicy.Shared.Services
             throw new NotImplementedException();
         }
 
+        public GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju()
+        {
+            throw new NotImplementedException();
+        }
+
         public int PodajSredniWiekZawodnikow(string kraj)
         {
             throw new NotImplementedException();
