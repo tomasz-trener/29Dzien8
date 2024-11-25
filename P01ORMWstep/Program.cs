@@ -240,6 +240,39 @@ namespace P01ORMWstep
             }
 
 
+            // do tej pory wybieralismy zbiór elementow 
+
+            // chcemy wybrac jeden rekord 
+
+            Zawodnik wyn22 = db.Zawodnik.Where(x => x.nazwisko == "małysz").ToArray()[0];
+
+
+            Zawodnik wyn23 = db.Zawodnik.Where(x => x.nazwisko == "małysz").FirstOrDefault();
+
+            Zawodnik wyn24 = db.Zawodnik.FirstOrDefault(x => x.nazwisko == "małysz");
+
+            Zawodnik wyn25 = db.Zawodnik.First(x => x.id_zawodnika == 20);
+
+
+            // znajdz zawodnikow których waga jest o dokładnie 1 kilogram mniejsza od wagi najwyższego zawodnika
+
+            var najwyzszy = db.Zawodnik.OrderByDescending(x=>x.wzrost).FirstOrDefault();
+            var wyb26 = db.Zawodnik.Where(x => x.waga == najwyzszy.waga - 1).ToArray();
+
+            // to samo w jednym : 
+
+            var wyb27 = db.Zawodnik.Where(x => x.waga == (db.Zawodnik.OrderByDescending(y => y.wzrost).FirstOrDefault()).waga - 1).ToArray();
+
+            // inne rozwaizanie 
+            var najwyzszyWzrost = db.Zawodnik.Select(x => x.wzrost).Max();
+            var wyn28 = db.Zawodnik.Where(x => x.waga == db.Zawodnik.FirstOrDefault(y => y.wzrost == najwyzszyWzrost).waga - 1).ToArray();
+
+            // to samo w jednym : 
+            var wyn29 = db.Zawodnik.Where(x => x.waga == db.Zawodnik.FirstOrDefault(y => y.wzrost == db.Zawodnik.Select(z => z.wzrost).Max()).waga - 1).ToArray();
+
+            // dla każdego kraju wypisz imie i nazwisko najwyzszego zawodnika z tego kraju 
+
+
             Console.ReadKey();
         }
     }
