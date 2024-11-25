@@ -25,7 +25,7 @@ namespace P03AplikacjaBazodanowaZawodnicy
 
         static FrmStartowy UstawSerwisy()
         {
-            return new FrmStartowy(new ManagerZawodnikow());
+            return new FrmStartowy(new ManagerZawodnikowLINQ());
         }
     }
 }

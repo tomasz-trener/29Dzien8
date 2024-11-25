@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace P04Zawodnicy.Shared.Services
 {     
-    internal class ManagerZawodnikowLINQ : IManagerZawodnikow
+    public class ManagerZawodnikowLINQ : IManagerZawodnikow
     {
         public void Dodaj(Zawodnik z)
         {
@@ -93,22 +93,75 @@ namespace P04Zawodnicy.Shared.Services
 
         public Zawodnik[] PodajZawodnikow(string kraj)
         {
-            throw new NotImplementedException();
+            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            {
+                var zawodnicyDb = db.ZawodnikDb
+                    .Where(x => x.kraj == kraj)
+                    .ToArray();
+
+                return mapujZawodnikow(zawodnicyDb);
+            }
+        }
+
+        private Zawodnik[] mapujZawodnikow(params ZawodnikDb[] dane)
+        {
+            Zawodnik[] tab = new Zawodnik[dane.Length];
+            for (int i = 0; i < dane.Length; i++)
+            {
+                tab[i] = new Zawodnik()
+                {
+                    Id_zawodnika = dane[i].id_zawodnika,
+                    Id_trenera = dane[i].id_trenera,
+                    Imie = dane[i].imie,
+                    Nazwisko = dane[i].nazwisko,
+                    Kraj = dane[i].kraj,
+                    Wzrost = (int)dane[i].wzrost,
+                    Waga = (int)dane[i].waga,
+                };
+            }
+            return tab;
         }
 
         public void Usun(int id)
         {
-            throw new NotImplementedException();
+            using(ModelBazyDataContext db = new ModelBazyDataContext())
+            {
+                var usuwany = db.ZawodnikDb.FirstOrDefault(x=>x.id_zawodnika == id);
+                db.ZawodnikDb.DeleteOnSubmit(usuwany);
+                db.SubmitChanges();
+            }
         }
 
         public List<Zawodnik> WczytajZawodnikow()
         {
-            throw new NotImplementedException();
+            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            {
+                var zawodnicyDb = db.ZawodnikDb.ToArray();
+                return mapujZawodnikow(zawodnicyDb).ToList();
+            }
         }
-
         public List<Osoba> WyszukajOsoby(string text)
         {
-            throw new NotImplementedException();
+            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            {
+                var zawodnicy = db.ZawodnikDb
+                    .Where(x => x.imie.Contains(text) || x.nazwisko.Contains(text))
+                    .Select(x => new Osoba()
+                    {
+                        Imie = x.imie,
+                        Nazwisko = x.nazwisko,
+                    }).ToList();
+
+                var trenerzy = db.TrenerDb
+                   .Where(x => x.imie_t.Contains(text) || x.nazwisko_t.Contains(text))
+                   .Select(x => new Osoba()
+                   {
+                       Imie = x.imie_t,
+                       Nazwisko = x.nazwisko_t,
+                   }).ToList();
+
+                return zawodnicy.Concat(trenerzy).ToList();
+            }
         }
     }
 }
