@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -251,7 +252,7 @@ namespace P01ORMWstep
 
             Zawodnik wyn24 = db.Zawodnik.FirstOrDefault(x => x.nazwisko == "małysz");
 
-            Zawodnik wyn25 = db.Zawodnik.First(x => x.id_zawodnika == 20);
+          //  Zawodnik wyn25 = db.Zawodnik.First(x => x.id_zawodnika == 20);
 
 
             // znajdz zawodnikow których waga jest o dokładnie 1 kilogram mniejsza od wagi najwyższego zawodnika
@@ -271,6 +272,62 @@ namespace P01ORMWstep
             var wyn29 = db.Zawodnik.Where(x => x.waga == db.Zawodnik.FirstOrDefault(y => y.wzrost == db.Zawodnik.Select(z => z.wzrost).Max()).waga - 1).ToArray();
 
             // dla każdego kraju wypisz imie i nazwisko najwyzszego zawodnika z tego kraju 
+
+            var wyn30 = db.Zawodnik
+                .GroupBy(x=>x.kraj)
+                .Select(x=> new
+                {
+                    Kraj = x.Key,
+                    Najwyzsi = db.Zawodnik.Where(y=>y.wzrost == x.Select(z=>z.wzrost).Max() && y.kraj == x.Key).Select(y=>y.imie + " " + y.nazwisko + " (" + y.wzrost + ")").ToArray()
+                }).ToArray();
+
+            // zamiast odwolywać się do wszystkich mozemy odowlac sie do danej grupy (x) 
+            // wtedy nie potrzebujemy dodatkowo filtrowac po kraju 
+            var wyn30b = db.Zawodnik
+            .GroupBy(x => x.kraj)
+            .Select(x => new
+            {
+                Kraj = x.Key,
+                Najwyzsi = x.Where(y => y.wzrost == x.Select(z => z.wzrost).Max()).Select(y => y.imie + " " + y.nazwisko + " (" + y.wzrost + ")").ToArray()
+            }).ToArray();
+
+            foreach (var g in wyn30b)
+                Console.WriteLine($"kraj: {g.Kraj} zawodnicy: {string.Join(" ,", g.Najwyzsi)}");
+
+
+            //var wyn30c = db.Zawodnik
+            //.GroupBy(x => x.kraj)
+            //.Select(x => new
+            //{
+            //    Najwyzsi = x.Where(y => y.wzrost == x.Select(z => z.wzrost).Max()).Select(y => y).ToArray()
+            //}).ToArray();
+
+            //foreach (var g in wyn30c)
+            //    Console.WriteLine($"kraj: {g.Najwyzsi.FirstOrDefault().kraj} zawodnicy: {string.Join(" ,", g.Najwyzsi.Select(x=>x.nazwisko))}");
+
+            // wypisz grupy nazwisk zawodnikow urodzonych w tym samym miesiacu 
+            
+            var wyn31 = db.Zawodnik
+                .Where(x=>x.data_ur.HasValue)
+                .GroupBy(x=>x.data_ur.Value.Month)
+                .Select(x=>new
+                {
+                    NrMiesiaca = x.Key,
+                    Nazwiska = string.Join(" ,",x.Select(y=>y.nazwisko).ToArray())
+                })
+                .OrderBy(x=>x.NrMiesiaca)
+                .ToArray();
+
+            foreach (var g in wyn31)
+                Console.WriteLine(g.NrMiesiaca + " " + g.Nazwiska);
+
+
+            //foreach (var g in wyn31)
+            //    Console.WriteLine(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.NrMiesiaca) + " " + g.Nazwiska);
+
+            var polskieWyrazy = new CultureInfo("pl-PL");
+            foreach (var g in wyn31)
+                Console.WriteLine(polskieWyrazy.DateTimeFormat.GetMonthName(g.NrMiesiaca) + " " + g.Nazwiska);
 
 
             Console.ReadKey();
