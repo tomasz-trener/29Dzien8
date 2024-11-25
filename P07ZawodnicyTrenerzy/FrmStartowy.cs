@@ -46,7 +46,7 @@ namespace P03AplikacjaBazodanowaZawodnicy
             przygotujWykres();
         }
 
-        private void przygotujWykres()
+        private void przygotujWykres(double? sredniWzrost = null)
         {
             chartWykres.Series.Clear();
             Series seriaDanych = new Series("Wzrosty");
@@ -64,6 +64,20 @@ namespace P03AplikacjaBazodanowaZawodnicy
 
             chartWykres.ChartAreas[0].AxisY.Minimum = 150;
             chartWykres.ChartAreas[0].AxisY.Maximum= 200;
+
+            //dodanie linii srednigo wzrostu 
+            if(sredniWzrost != null)
+            {
+                Series seriaSredniegoWzrostu = new Series("Sredni wzrost");
+                seriaSredniegoWzrostu.ChartType= SeriesChartType.Line;
+                seriaSredniegoWzrostu.BorderWidth= 3;
+                seriaSredniegoWzrostu.Color = Color.Red;
+
+                foreach (var punkt in chartWykres.Series["Wzrosty"].Points)
+                    seriaSredniegoWzrostu.Points.AddXY(punkt.AxisLabel, sredniWzrost);
+
+                chartWykres.Series.Add(seriaSredniegoWzrostu);
+            }
         }
 
         private void generujObrazkiKrajow(string[] kraje)
@@ -139,6 +153,7 @@ namespace P03AplikacjaBazodanowaZawodnicy
 
                 double wzrost = mz.PodajSredniWzrost(zaznaczonyKraj);
                 lblRaportWzrost.Text = string.Format("Sredni wzrost : {0:0.00} cm", wzrost);
+                przygotujWykres(wzrost);
             }
 
            
