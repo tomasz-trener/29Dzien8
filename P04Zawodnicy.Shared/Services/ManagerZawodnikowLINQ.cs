@@ -2,6 +2,8 @@
 using P04Zawodnicy.Shared.Domains;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +12,15 @@ namespace P04Zawodnicy.Shared.Services
 {     
     public class ManagerZawodnikowLINQ : IManagerZawodnikow
     {
+        // private readonly string connString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=A_Zawodnicy;Integrated Security=True;Encrypt=False";
+        private readonly string connString;
+        public ManagerZawodnikowLINQ()
+        {
+            connString = ConfigurationManager.ConnectionStrings["A_ZawodnicyConnectionString"].ConnectionString;
+        }
         public void Dodaj(Zawodnik z)
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var zb = new ZawodnikDb();
                 mapujNaZawodnikaDb(z, zb);
@@ -36,7 +44,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public void Edytuj(Zawodnik edytowany)
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 ZawodnikDb zd = db.ZawodnikDb.FirstOrDefault(x => x.id_zawodnika == edytowany.Id_zawodnika);
                 mapujNaZawodnikaDb(edytowany, zd);
@@ -46,7 +54,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public string[] PodajKraje()
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                  return db.ZawodnikDb
                     .GroupBy(x=>x.kraj)
@@ -57,7 +65,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public int PodajSredniWiekZawodnikow(string kraj)
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var sredniWiek=  db.ZawodnikDb
                    .Where(x => x.kraj.Equals(kraj))
@@ -69,7 +77,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public double PodajSredniWzrost(string kraj)
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 return db.ZawodnikDb
                    .Where(x => x.kraj.Equals(kraj))     
@@ -79,7 +87,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public Trener[] PodajTrenerow()
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var ternerzy = db.TrenerDb.Select(x => new Trener()
                 {
@@ -93,7 +101,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public Zawodnik[] PodajZawodnikow(string kraj)
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var zawodnicyDb = db.ZawodnikDb
                     .Where(x => x.kraj == kraj)
@@ -124,7 +132,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public void Usun(int id)
         {
-            using(ModelBazyDataContext db = new ModelBazyDataContext())
+            using(ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var usuwany = db.ZawodnikDb.FirstOrDefault(x=>x.id_zawodnika == id);
                 db.ZawodnikDb.DeleteOnSubmit(usuwany);
@@ -134,7 +142,7 @@ namespace P04Zawodnicy.Shared.Services
 
         public List<Zawodnik> WczytajZawodnikow()
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var zawodnicyDb = db.ZawodnikDb.ToArray();
                 return mapujZawodnikow(zawodnicyDb).ToList();
@@ -142,7 +150,7 @@ namespace P04Zawodnicy.Shared.Services
         }
         public List<Osoba> WyszukajOsoby(string text)
         {
-            using (ModelBazyDataContext db = new ModelBazyDataContext())
+            using (ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 var zawodnicy = db.ZawodnikDb
                     .Where(x => x.imie.Contains(text) || x.nazwisko.Contains(text))
@@ -167,7 +175,7 @@ namespace P04Zawodnicy.Shared.Services
         public GrupaKraju[] PodajSerdniWzrostDlaKazdegoKraju()
         {
             
-            using(ModelBazyDataContext db = new ModelBazyDataContext())
+            using(ModelBazyDataContext db = new ModelBazyDataContext(connString))
             {
                 return db.ZawodnikDb
                     .GroupBy(x=>x.kraj)

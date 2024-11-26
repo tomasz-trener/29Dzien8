@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="A_Zawodnicy" Class="ModelBazyDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=(localdb)\mssqllocaldb;Initial Catalog=A_Zawodnicy;Integrated Security=True;Encrypt=False" SettingsObjectName="P04Zawodnicy.Shared.Properties.Settings" SettingsPropertyName="A_ZawodnicyConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.zawodnicy" Member="ZawodnikDb">
     <Type Name="ZawodnikDb">
       <Column Name="id_zawodnika" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

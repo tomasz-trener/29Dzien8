@@ -2,4 +2,4 @@
 2) poznalismy sposoby dodwania, usuwania, edycji danych w bazie danych przy pomocy LINQ 
 3) dodalismy nowy managerZawodnikowLINQ (korzystajac z intrefejsu)
 4) dodalismy wykresy do aplikacji z wykozrystaniem metod przetwarzania danych w LINQ 
-
+5) Wyniesenie connstring do aplikacji klienckiej 

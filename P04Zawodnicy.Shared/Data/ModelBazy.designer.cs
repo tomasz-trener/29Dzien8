@@ -38,12 +38,6 @@ namespace P04Zawodnicy.Shared.Data
     partial void DeleteTrenerDb(TrenerDb instance);
     #endregion
 		
-		public ModelBazyDataContext() : 
-				base(global::P04Zawodnicy.Shared.Properties.Settings.Default.A_ZawodnicyConnectionString, mappingSource)
-		{
-			OnCreated();
-		}
-		
 		public ModelBazyDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
