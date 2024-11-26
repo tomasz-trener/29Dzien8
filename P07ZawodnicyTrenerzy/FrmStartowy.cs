@@ -48,6 +48,9 @@ namespace P03AplikacjaBazodanowaZawodnicy
 
         private void przygotujWykres(double? sredniWzrost = null)
         {
+            chartWykres.BorderlineColor = Color.Green;
+            chartWykres.BorderlineWidth = 7;
+            chartWykres.BorderlineDashStyle = ChartDashStyle.Solid;
             chartWykres.Series.Clear();
             Series seriaDanych = new Series("Wzrosty");
             seriaDanych.ChartType= SeriesChartType.Column;
